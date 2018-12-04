@@ -1,2 +1,2 @@
 # TRAFT
-Implement Raft Based C++11/17
+Implement Raft Based C++17
