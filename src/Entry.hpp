@@ -1,0 +1,59 @@
+#ifndef RAFT_ENTRY_H
+#define RAFT_ENTRY_H
+
+#include "PrebufferedStream.hpp"
+#include "Util.hpp"
+#include<string>
+#include<thread>
+#include<ostream>
+
+namespace TRAFT{
+
+struct Entry{
+
+    using pthread_id=std::thread::id;
+    up_time log_time;
+    pthread_id m_t;
+    PrebufferedStreambuf m_streambuf;
+    char m_buf[1];
+    size_t m_buf_len;
+    short prior;
+
+    Entry():Entry(getCurrentTimeSeconds(),std::this_thread::get_id(),0,nullptr){}
+    Entry(up_time s,pthread_id id,short prior,const char *msg=nullptr):
+        log_time(s),
+        m_t(id),
+        prior(prior),
+        m_streambuf(m_buf, sizeof(m_buf)),
+        m_buf_len(sizeof(m_buf))
+    {
+      if (msg) {
+	    std::ostream os(&m_streambuf);
+        char buf[100];
+        int r = std::strftime(buf,sizeof(buf),"%c %Z", std::localtime(&log_time));
+        os << buf;
+        os << " ";
+        os << "Level: "<< prior << " ";
+        os << m_t << " ";
+        os << msg;
+        os << "\n";
+      }
+    }
+    const std::string get_str() const {
+
+        return m_streambuf.get_str();
+    }
+    size_t size() const {
+        return m_streambuf.size();
+    }
+    int snprintf(char* dst, size_t avail) const {
+        return m_streambuf.snprintf(dst, avail);
+    }
+
+};
+
+}
+
+
+
+#endif
