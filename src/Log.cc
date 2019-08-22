@@ -131,7 +131,7 @@ namespace TRAFT{
     /*
     单消费者模型。若要支持多消费者模型，需要修改flush()处代码
     */
-    void Log::thread_handle(std::string thread_name){
+    void Log::thread_handle(const std::string thread_name){
         std::unique_lock<std::mutex> lock(lock_queue);
         m_queue_mutex_holder = pthread_self();
         while ( !m_stop ){

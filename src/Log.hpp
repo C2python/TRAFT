@@ -56,7 +56,7 @@ public:
     void stop();
     bool is_started();
     int open_log_file(const std::string&);
-    void thread_handle(std::string name);
+    void thread_handle(const std::string name);
     void join();
     void detach();
     std::shared_ptr<Entry> create_entry(int level,std::thread::id,const std::string&);
