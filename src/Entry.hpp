@@ -36,7 +36,7 @@ struct Entry{
         os << "Level: "<< prior << " ";
         os << m_t << " ";
         os << msg;
-        os << "\n";
+        //os << "\n";
       }
     }
     const std::string get_str() const {

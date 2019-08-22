@@ -9,7 +9,7 @@ set (Tutorial_VERSION_MAJOR 0)
 
 PROJECT (TRAFT)
 
-set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--std=c++1y -pthread")
+set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--std=c++1y")
 
 set (DIR_SRCS
     Config.cc
@@ -19,7 +19,6 @@ set (DIR_SRCS
     )
 
 add_library(traft_a STATIC ${DIR_SRCS})
-#target_link_libraries(traft_a pthread)
 
 add_executable(traft traft.cc)
 target_link_libraries(traft traft_a ${CMAKE_THREAD_LIBS_INIT})

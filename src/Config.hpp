@@ -17,7 +17,6 @@ struct Context{
         int fd;
         std::shared_ptr<Log> _log;
         M_Config_t(){
-            std::cout<<"Construct M_Config_t"<<std::endl;
             _log = std::make_shared<Log>("./raft.log");
         }
     };

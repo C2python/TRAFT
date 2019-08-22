@@ -180,17 +180,18 @@ namespace TRAFT{
             e = flush_pr.front();
             flush_pr.pop();
             char* buf;
-            char buf0[e->size()+1];
+            char buf0[e->size()+2];
             size_t buflen = 0;
             //Alloc heap buf if need more then 64K buffer.
-            bool need_dynamic = (e->size()+1) > 0x10000;
+            bool need_dynamic = (e->size()+2) > 0x10000;
             if ( need_dynamic ){
-                buf = new char[e->size()+1];
+                buf = new char[e->size()+2];
             }else{
                 buf = buf0;
             }
-            buflen = e->size()+1;
+            buflen = e->size()+2;
             e->snprintf(buf,e->size()+1);
+            buf[buflen-1] = '\n';
             ssize_t r = safe_write(m_fd,buf,buflen);
             if (r < 0){
                 std::cerr<<"Problem Occured in Writing to Log File: "<<m_log_file<<cpp_strerror(r)<<std::endl;
