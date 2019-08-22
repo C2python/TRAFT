@@ -55,7 +55,7 @@ public:
     void start();
     void stop();
     bool is_started();
-    void open_log_file();
+    int open_log_file(const std::string&);
     void thread_handle(std::string name);
     void join();
     void detach();

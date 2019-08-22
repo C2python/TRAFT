@@ -36,7 +36,7 @@ namespace TRAFT{
                 m_uid(0),
                 m_gid(0),
                 m_log_file(log_name){
-                   open_log_file();
+                   open_log_file(log_name);
     }
     Log::~Log(){
         if (m_exit){
@@ -93,9 +93,10 @@ namespace TRAFT{
         logHandle = std::move(std::thread(&Log::thread_handle,this,"Log"));
     }
 
-    void Log::open_log_file(){
+    int Log::open_log_file(const std::string& log_file){
         std::unique_lock<std::mutex> lock(lock_flush);
         m_flush_mutex_holder = pthread_self();
+        m_log_file = log_file;
 
         if (m_fd > 0){
             ::close(m_fd);
@@ -115,12 +116,12 @@ namespace TRAFT{
         }
         m_flush_mutex_holder = 0;
         lock.unlock();
+        return m_fd >= 0? 1:-1;
     }
 
     int Log::set_log_file(const std::string& log_file){
-        m_log_file = log_file;
-        open_log_file();
-        return 0;
+        int ret = open_log_file(log_file);
+        return ret;
     }
 
     std::shared_ptr<Entry> Log::create_entry(int level,std::thread::id p_id,const std::string& msg){
