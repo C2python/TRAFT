@@ -1,6 +1,7 @@
 #ifndef TRAFT_LOG_H
 #define TRAFT_LOG_H
 
+#include<vector>
 #include<queue>
 #include<mutex>
 #include<thread>
@@ -10,9 +11,9 @@
 #include<string>
 #include<iostream>
 
-#include "On_exit.hpp"
-#include "Util.hpp"
-#include "Entry.hpp"
+#include "on_exit.hpp"
+#include "util.hpp"
+#include "entry.hpp"
 
 namespace TRAFT{
 
@@ -24,7 +25,7 @@ private:
 
     Log** m_exit;
 
-    std::queue<std::shared_ptr<Entry>> m_new;
+    std::vector<std::shared_ptr<Entry>> m_new;
     std::queue<std::shared_ptr<Entry>> m_recent;
     int max_new;
     int max_recent;
@@ -44,7 +45,7 @@ private:
     pthread_t m_queue_mutex_holder;
     pthread_t m_flush_mutex_holder;
 
-    void _flush(std::queue<std::shared_ptr<Entry>>&,bool crash=false);
+    void _flush(std::vector<std::shared_ptr<Entry>>&,bool crash=false);
 
 public:
 
@@ -59,7 +60,8 @@ public:
     void thread_handle(const std::string name);
     void join();
     void detach();
-    std::shared_ptr<Entry> create_entry(int level,std::thread::id,const std::string&);
+    std::shared_ptr<Entry> create_entry(short level,pthread_t,const std::string&);
+    std::shared_ptr<Entry> create_entry(short level,pthread_t p_id = pthread_self());
     void submit_entry(std::shared_ptr<Entry>);
     int set_log_file(const std::string& log_file);
 

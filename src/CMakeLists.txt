@@ -3,10 +3,10 @@
 set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pthread")
 
 set (DIR_SRCS
-    Config.cc
-    Log.cc
+    config.cc
+    log.cc
     PrebufferedStream.cc
-    Util.cc
+    util.cc
     )
 
 add_library(traft_a STATIC ${DIR_SRCS})

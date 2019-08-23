@@ -1,21 +1,29 @@
-#include "Log.hpp"
-#include "Config.hpp"
-#include <thread>
+#include "log.hpp"
+#include "config.hpp"
+#include "dout.hpp"
 
+using namespace TRAFT;
 
 int main(int argc, char* argv[]){
     
 
 
-    TRAFT::cct->conf->_log->start();
+    cct->conf->_log->start();
 
-    auto e = TRAFT::cct->conf->_log->create_entry(10,std::this_thread::get_id(),"Test Log");
+    auto e = cct->conf->_log->create_entry(10,pthread_self(),"Test Log.");
 
-    TRAFT::cct->conf->_log->submit_entry(e);
+    cct->conf->_log->submit_entry(e);
 
-    TRAFT::cct->conf->_log->stop();
+    dout(2)<<"Test Dout."<<dendl;
 
-    TRAFT::cct->conf->_log->join();
+    dout(6)<<"Upper Level Log Level."<<dendl;
+
+    lderr<<"ERROR Occur."<<dendl;
+
+    cct->conf->_log->stop();
+
+    cct->conf->_log->join();
+    
 
 
     return 0;

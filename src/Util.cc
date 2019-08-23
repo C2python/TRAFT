@@ -1,4 +1,4 @@
-#include "Util.hpp"
+#include "util.hpp"
 
 namespace TRAFT{
 

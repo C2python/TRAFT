@@ -3,7 +3,7 @@
 * Feature: Global Conf Var
 */
 
-#include "Config.hpp"
+#include "config.hpp"
 #include <memory>
 
 namespace TRAFT{

@@ -4,8 +4,8 @@
 #include<fcntl.h> 
 #include<cerrno>
 
-#include "Log.hpp"
-#include "Config.hpp"
+#include "log.hpp"
+#include "config.hpp"
 
 #define DEFAULT_MAX_NEW    100
 #define DEFAULT_MAX_RECENT 10000
@@ -63,7 +63,7 @@ namespace TRAFT{
 
         cond_queue.wait(lock,[&]{return m_new.size() < max_new;});
         
-        m_new.push(log);
+        m_new.emplace_back(std::move(log));
 
         cond_flush.notify_one();
         m_queue_mutex_holder = 0;
@@ -124,8 +124,12 @@ namespace TRAFT{
         return ret;
     }
 
-    std::shared_ptr<Entry> Log::create_entry(int level,std::thread::id p_id,const std::string& msg){
-        return std::make_shared<Entry>(getCurrentTimeSeconds(),p_id,level,msg.c_str());
+    std::shared_ptr<Entry> Log::create_entry(short level,pthread_t p_id,const std::string& msg){
+        return std::make_shared<Entry>(level,getCurrentTimeSeconds(),p_id,msg.c_str());
+    }
+
+    std::shared_ptr<Entry> Log::create_entry(short level, pthread_t p_id){
+        return std::make_shared<Entry>(p_id,level);
     }
 
     /*
@@ -154,7 +158,7 @@ namespace TRAFT{
         std::unique_lock<std::mutex> flush_lock(lock_flush);
         m_flush_mutex_holder = pthread_self();
 
-        std::queue<std::shared_ptr<Entry>> flush_pr;
+        std::vector<std::shared_ptr<Entry>> flush_pr;
         m_new.swap(flush_pr);
 
         cond_queue.notify_all();
@@ -172,14 +176,12 @@ namespace TRAFT{
 
     }
 
-    void Log::_flush(std::queue<std::shared_ptr<Entry>>& flush_pr,bool crash){
+    void Log::_flush(std::vector<std::shared_ptr<Entry>>& flush_pr,bool crash){
         /*
         crash: To do
         */
        std::shared_ptr<Entry> e;
-       while (!flush_pr.empty()){
-            e = flush_pr.front();
-            flush_pr.pop();
+       for(auto& e:flush_pr){
             char* buf;
             char buf0[e->size()+2];
             size_t buflen = 0;
