@@ -1,7 +1,5 @@
 #Project TRAFT by ZhangWen
 
-set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pthread")
-
 set (DIR_SRCS
     config.cc
     log.cc
@@ -12,6 +10,15 @@ set (DIR_SRCS
 add_library(traft_a STATIC ${DIR_SRCS})
 
 add_executable(traft traft.cc)
-target_link_libraries(traft traft_a ${CMAKE_THREAD_LIBS_INIT})
+
+find_package(Threads REQUIRED)
+
+if(THREADS_HAVE_PTHREAD_ARG)
+    target_compile_options(traft PUBLIC "-pthread")
+endif()
+
+MESSAGE (STATUS "MAKE_THREAD_LIBS_INIT=${CMAKE_THREAD_LIBS_INIT}")
+
+target_link_libraries(traft PUBLIC traft_a "${CMAKE_THREAD_LIBS_INIT}")
 
 install (TARGETS traft DESTINATION bin)

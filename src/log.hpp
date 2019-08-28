@@ -64,6 +64,9 @@ public:
     std::shared_ptr<Entry> create_entry(short level,pthread_t p_id = pthread_self());
     void submit_entry(std::shared_ptr<Entry>);
     int set_log_file(const std::string& log_file);
+    std::string get_log_file(){
+        return m_log_file;
+    }
 
 };
 
