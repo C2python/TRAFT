@@ -30,8 +30,11 @@ if (NOT __GTEST_INCLUDED) # guard against multiple includes
         )
 
     set(gtest_FOUND TRUE)
-    if (NOT DEFINED CMAKE_INSTALL_LIBDIR)
+    if (UNIX)
         set (CMAKE_INSTALL_LIBDIR lib64)
+    endif()
+    if (APPLE)
+	set (CMAKE_INSTALL_LIBDIR lib)
     endif()
     set(gtest_INCLUDE_DIRS ${gtest_INSTALL}/include)
     set(gtest_LIBRARIES ${gtest_INSTALL}/${CMAKE_INSTALL_LIBDIR}/libgtest.a ${gtest_INSTALL}/${CMAKE_INSTALL_LIBDIR}/libgtest_main.a ${CMAKE_THREAD_LIBS_INIT})
