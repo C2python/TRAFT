@@ -10,4 +10,14 @@
   __result; })
 #endif
 
+#if defined(__APPLE__)
+  #define up_pthread_setname(thread, name) ({ \
+    int __result = 0;                         \
+    if (thread == pthread_self())             \
+      __result = pthread_setname_np(name);    \
+    __result; })
+#else
+  #define up_pthread_setname pthread_setname_np
+#endif
+
 #endif

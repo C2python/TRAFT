@@ -5,6 +5,8 @@ set (DIR_SRCS
     log.cc
     PrebufferedStream.cc
     util.cc
+    Thread.cc
+    signal.cc
     )
 
 add_library(traft_a STATIC ${DIR_SRCS})

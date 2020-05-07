@@ -2,8 +2,7 @@
 #define TRAFT_DOUT_H
 
 #include "config.hpp"
-
-namespace TRAFT{
+using namespace TRAFT;
 
 #define dout_prefix *_dout
 
@@ -25,7 +24,5 @@ namespace TRAFT{
 #define dout(v) ldout(cct,v)
 
 #define lderr derr(cct)
-
-}
 
 #endif
