@@ -17,7 +17,7 @@ struct Context{
         int fd;
         std::shared_ptr<Log> _log;
         M_Config_t(){
-            _log = std::make_shared<Log>("/var/log/traft.log");
+            _log = std::make_shared<Log>("./traft.log");
         }
     };
     std::shared_ptr<M_Config_t> conf;

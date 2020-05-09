@@ -65,7 +65,7 @@ namespace TRAFT{
         
         m_new.emplace_back(std::move(log));
 
-        cond_flush.notify_one();
+        cond_flush.notify_all();
         m_queue_mutex_holder = 0;
         lock.unlock();
     }
@@ -79,7 +79,7 @@ namespace TRAFT{
         {
             std::lock_guard<std::mutex> lock(lock_queue);
             m_stop = true;
-            cond_flush.notify_one();
+            cond_flush.notify_all();
             cond_queue.notify_all();
         }
     }
@@ -140,7 +140,7 @@ namespace TRAFT{
         m_queue_mutex_holder = pthread_self();
         while ( !m_stop ){
             m_queue_mutex_holder = 0;
-            cond_flush.wait(lock,[&]{return !m_new.empty();});
+            cond_flush.wait(lock,[&]{return !m_new.empty() || m_stop;});
             lock.unlock();
             flush();
             lock.lock();

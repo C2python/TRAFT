@@ -7,6 +7,7 @@ set (DIR_SRCS
     util.cc
     Thread.cc
     signal.cc
+    Timer.cc
     )
 
 add_library(traft_a STATIC ${DIR_SRCS})
