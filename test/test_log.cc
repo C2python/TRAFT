@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "log.hpp"
-#include "config.hpp"
-#include "dout.hpp"
+#include "../src/log.hpp"
+#include "../src/config.hpp"
+#include "../src/dout.hpp"
 using namespace TRAFT;
 
 TEST(Log,fun_set){
