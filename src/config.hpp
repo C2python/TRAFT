@@ -11,6 +11,10 @@
 
 namespace TRAFT{
 
+class Context;
+
+extern Context* cct;
+
 struct Context{
     struct M_Config_t{
         int log_level=5;
@@ -28,8 +32,6 @@ struct Context{
     int set_log(const std::string&);
     void set_loglevel(const int&);
 };
-
-extern Context* cct;
 
 }
 

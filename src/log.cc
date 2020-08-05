@@ -12,7 +12,7 @@
 
 namespace TRAFT{
 
-    extern Context* cct;
+    //extern Context* cct;
 
     static OnExitManager exit_callbacks;
 

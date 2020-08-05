@@ -4,16 +4,23 @@
 #include "Timer.hpp"
 
 using namespace TRAFT;
+//extern Context* cct;
+
+int global_init(){
+    cct = new Context();
+    cct->conf->_log->start();
+    return 1;
+}
 
 int main(int argc, char* argv[]){
     
-
-
-    cct->conf->_log->start();
-
+    int r = global_init();
+    /*
     auto e = cct->conf->_log->create_entry(10,pthread_self(),"Test Log.");
 
     cct->conf->_log->submit_entry(e);
+    */
+    dout(2)<<"Test Dout AFter."<<dendl;
 
     dout(2)<<"Test Dout."<<dendl;
 

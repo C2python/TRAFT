@@ -8,7 +8,7 @@
 
 namespace TRAFT{
 
-Context* cct= new Context();
+Context* cct= nullptr;
 
 int Context::set_log(const std::string& name){
     int r = conf->_log->set_log_file(name);

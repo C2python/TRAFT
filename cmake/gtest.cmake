@@ -1,3 +1,5 @@
+# Not Used
+
 if (NOT __GTEST_INCLUDED) # guard against multiple includes
     set(__GTEST_INCLUDED TRUE)
 
