@@ -19,15 +19,15 @@ endif()
 # Note: For all external projects, instead of using checked-out code, one could
 # specify GIT_REPOSITORY and GIT_TAG to have cmake download the dependency directly,
 # without needing to add a submodule to your project.
-ExternalProject_Add(c-ares
-  PREFIX c-ares
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/grpc/third_party/cares/cares"
-  CMAKE_CACHE_ARGS
-        -DCARES_SHARED:BOOL=OFF
-        -DCARES_STATIC:BOOL=ON
-        -DCARES_STATIC_PIC:BOOL=ON
-        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares
-)
+#ExternalProject_Add(c-ares
+#  PREFIX c-ares
+#  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/grpc/third_party/cares/cares"
+#  CMAKE_CACHE_ARGS
+#        -DCARES_SHARED:BOOL=OFF
+#        -DCARES_STATIC:BOOL=ON
+#        -DCARES_STATIC_PIC:BOOL=ON
+#        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares
+#)
 
 # Builds protobuf project from the git submodule.
 ExternalProject_Add(protobuf
@@ -41,12 +41,12 @@ ExternalProject_Add(protobuf
 )
 
 # Builds zlib project from the git submodule.
-ExternalProject_Add(zlib
-  PREFIX zlib
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/grpc/third_party/zlib"
-  CMAKE_CACHE_ARGS
-        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/zlib
-)
+#ExternalProject_Add(zlib
+#  PREFIX zlib
+#  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/grpc/third_party/zlib"
+#  CMAKE_CACHE_ARGS
+#        -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/zlib
+#)
 
 # the location where protobuf-config.cmake will be installed varies by platform
 if (APPLE)
@@ -73,14 +73,15 @@ ExternalProject_Add(grpc
         -DgRPC_PROTOBUF_PROVIDER:STRING=package
         -DgRPC_PROTOBUF_PACKAGE_TYPE:STRING=CONFIG
         -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
-        -DgRPC_ZLIB_PROVIDER:STRING=package
-        -DZLIB_ROOT:STRING=${CMAKE_CURRENT_BINARY_DIR}/zlib
-        -DgRPC_CARES_PROVIDER:STRING=package
-        -Dc-ares_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares/lib/cmake/c-ares
+        #-DgRPC_ZLIB_PROVIDER:STRING=package
+        #-DZLIB_ROOT:STRING=${CMAKE_CURRENT_BINARY_DIR}/zlib
+        #-DgRPC_CARES_PROVIDER:STRING=package
+        #-Dc-ares_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares/lib/cmake/c-ares
         -DgRPC_SSL_PROVIDER:STRING=package
         ${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc
-  DEPENDS c-ares protobuf zlib
+  #DEPENDS c-ares protobuf zlib
+  DEPENDS protobuf
 )
 
 if ( BUILD_TESTS )
@@ -133,8 +134,6 @@ externalProject_Add(traft
   #INSTALL_COMMAND ""
   CMAKE_CACHE_ARGS
         -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
-        -Dc-ares_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares/lib/cmake/c-ares
-        -DZLIB_ROOT:STRING=${CMAKE_CURRENT_BINARY_DIR}/zlib
         ${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
         -DgRPC_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc/lib/cmake/grpc
         -DGTest_INC:PATH=${CMAKE_CURRENT_BINARY_DIR}/gtest/include
