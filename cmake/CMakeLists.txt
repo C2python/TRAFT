@@ -77,8 +77,8 @@ ExternalProject_Add(grpc
         #-DZLIB_ROOT:STRING=${CMAKE_CURRENT_BINARY_DIR}/zlib
         #-DgRPC_CARES_PROVIDER:STRING=package
         #-Dc-ares_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/c-ares/lib/cmake/c-ares
-        -DgRPC_SSL_PROVIDER:STRING=package
-        ${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
+        #-DgRPC_SSL_PROVIDER:STRING=package
+        #${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc
   #DEPENDS c-ares protobuf zlib
   DEPENDS protobuf
