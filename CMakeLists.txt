@@ -1,7 +1,7 @@
 #Project TRAFT by ZhangWen
 
 
-cmake_minimum_required (VERSION 3.5.1)
+cmake_minimum_required (VERSION 3.15.1)
 
 #option( BUILD_TESTS    "Build unit tests."  ON )
 
