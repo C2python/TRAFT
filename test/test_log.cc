@@ -15,24 +15,32 @@ TEST(Log,fun_set){
     log->join();
 }
 
-TEST(Log,dout){
-    cct->conf->_log->start();
+class LogTest: public ::testing::Test{
+protected:
+    static void SetUpTestCase() {
+        cct = new Context();
+        cct->conf->_log->start();
+    }
+
+    static void TearDownTestCase() {
+        cct->conf->_log->stop();
+        cct->conf->_log->join();
+    }
+
+};
+
+TEST_F(LogTest,dout){
     dout(1)<<"Test Log Dout Fun."<<dendl;
     lderr<<"Error Log."<<dendl;
-    cct->conf->_log->stop();
-    cct->conf->_log->join();
 }
 
-TEST(Context,set_log){
-    cct->conf->_log->start();
+TEST_F(LogTest,set_log){
     cct->set_log("/var/log/ttraft.log");
     EXPECT_EQ(cct->conf->_log->get_log_file(),"/var/log/ttraft.log");
     lderr<<"Error Log."<<dendl;
-    cct->conf->_log->stop();
-    cct->conf->_log->join();
 }
 
-TEST(Context,set_log_level){
+TEST_F(LogTest,set_log_level){
     cct->set_loglevel(9);
     EXPECT_EQ(cct->conf->log_level,9);
 }

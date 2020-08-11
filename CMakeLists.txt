@@ -8,7 +8,7 @@ cmake_minimum_required (VERSION 3.5.1)
 set (Tutorial_VERSION_MAJOR 1)
 set (Tutorial_VERSION_MAJOR 0)
 
-project(TRAFT)
+project(TRAFT LANGUAGES C CXX)
 
 MESSAGE (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 
