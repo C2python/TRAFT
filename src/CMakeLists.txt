@@ -11,7 +11,7 @@ set (DIR_SRCS
     signal.cc
     Timer.cc
     )
-    #
+
 # GRPC Protoc cmake 
 set(protobuf_MODULE_COMPATIBLE TRUE)
 find_package(Protobuf CONFIG REQUIRED)
@@ -46,10 +46,12 @@ set(rf_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.pb.h")
 set(rf_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.grpc.pb.cc")
 set(rf_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.grpc.pb.h")
 
+message(STATUS "rf_srcs=${rf_srcs}")
 message(STATUS "rf_proto=${rf_proto}")
 
 add_custom_command(
       OUTPUT "${rf_proto_srcs}" "${rf_proto_hdrs}" "${rf_grpc_srcs}" "${rf_grpc_hdrs}"
+      #OUTPUT "${rf_srcs}"
       COMMAND ${_PROTOBUF_PROTOC}
       ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}/include"
         --cpp_out "${CMAKE_CURRENT_BINARY_DIR}/include"
@@ -65,6 +67,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 add_library(traft_a STATIC ${DIR_SRCS})
 
 add_executable(traft traft.cc ${rf_proto_srcs} ${rf_grpc_srcs})
+add_executable(traft_cli client/client.cc ${rf_proto_srcs} ${rf_grpc_srcs})
 
 find_package(Threads REQUIRED)
 
@@ -74,6 +77,7 @@ endif()
 
 MESSAGE (STATUS "MAKE_THREAD_LIBS_INIT=${CMAKE_THREAD_LIBS_INIT}")
 
-target_link_libraries(traft PUBLIC traft_a "${CMAKE_THREAD_LIBS_INIT}" ${_REFLECTION} ${_GRPC_GRPCPP} ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(traft PUBLIC traft_a ${CMAKE_THREAD_LIBS_INIT} ${_REFLECTION} ${_GRPC_GRPCPP} ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(traft_cli PUBLIC traft_a ${CMAKE_THREAD_LIBS_INIT} ${_REFLECTION} ${_GRPC_GRPCPP} ${_PROTOBUF_LIBPROTOBUF})
 
-install (TARGETS traft DESTINATION bin)
+install (TARGETS traft traft_cli DESTINATION bin)

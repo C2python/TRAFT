@@ -136,7 +136,6 @@ externalProject_Add(traft
         -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
         ${_CMAKE_ARGS_OPENSSL_ROOT_DIR}
         -DgRPC_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc/lib/cmake/grpc
-        -DgRPC_INC:PATH=${CMAKE_CURRENT_BINARY_DIR}/grpc/include
         -DGTest_INC:PATH=${CMAKE_CURRENT_BINARY_DIR}/gtest/include
         -DGTest_DIR:PATH=${GTest_DIR}
         -DBUILD_TESTS:BOOL=${BUILD_TESTS}
