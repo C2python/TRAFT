@@ -3,8 +3,9 @@ Implement Raft Based C++17
 
 # Build
 ```
-# mkdir traft/cmake/build
-# cd TRAFT/cmake/build
+# git submodule update --init --recursive
+# mkdir cmake/build
+# cd cmake/build
 ```
 **Linux**
 
