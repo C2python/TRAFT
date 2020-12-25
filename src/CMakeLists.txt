@@ -1,6 +1,6 @@
 #Project TRAFT by ZhangWen
 
-MESSAGE (STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
+message(STATUS "Building: ${CMAKE_CURRENT_BINARY_DIR")
 
 set (DIR_SRCS
     config.cc
@@ -46,12 +46,8 @@ set(rf_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.pb.h")
 set(rf_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.grpc.pb.cc")
 set(rf_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/include/raft.grpc.pb.h")
 
-message(STATUS "rf_srcs=${rf_srcs}")
-message(STATUS "rf_proto=${rf_proto}")
-
 add_custom_command(
-      OUTPUT "${rf_proto_srcs}" "${rf_proto_hdrs}" "${rf_grpc_srcs}" "${rf_grpc_hdrs}"
-      #OUTPUT "${rf_srcs}"
+      OUTPUT ${rf_proto_srcs} ${rf_proto_hdrs} ${rf_grpc_srcs} ${rf_grpc_hdrs}
       COMMAND ${_PROTOBUF_PROTOC}
       ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}/include"
         --cpp_out "${CMAKE_CURRENT_BINARY_DIR}/include"
@@ -60,14 +56,20 @@ add_custom_command(
         "${rf_proto}"
       DEPENDS "${rf_proto}")
 
-# Include generated *.pb.h files
+add_custom_target(
+  raft_target ALL
+  DEPENDS ${rf_proto_srcs} ${rf_proto_hdrs} ${rf_grpc_srcs} ${rf_grpc_hdrs}
+  COMMENT "raft proto building")
 
+# Include generated *.pb.h files
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library(traft_a STATIC ${DIR_SRCS})
 
 add_executable(traft traft.cc ${rf_proto_srcs} ${rf_grpc_srcs})
 add_executable(traft_cli client/client.cc ${rf_proto_srcs} ${rf_grpc_srcs})
+add_dependencies(traft raft_target)
+add_dependencies(traft_cli raft_target)
 
 find_package(Threads REQUIRED)
 
@@ -77,7 +79,17 @@ endif()
 
 MESSAGE (STATUS "MAKE_THREAD_LIBS_INIT=${CMAKE_THREAD_LIBS_INIT}")
 
-target_link_libraries(traft PUBLIC traft_a ${CMAKE_THREAD_LIBS_INIT} ${_REFLECTION} ${_GRPC_GRPCPP} ${_PROTOBUF_LIBPROTOBUF})
-target_link_libraries(traft_cli PUBLIC traft_a ${CMAKE_THREAD_LIBS_INIT} ${_REFLECTION} ${_GRPC_GRPCPP} ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(traft PUBLIC 
+      traft_a
+      ${CMAKE_THREAD_LIBS_INIT}
+      ${_REFLECTION}
+      ${_GRPC_GRPCPP}
+      ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(traft_cli PUBLIC
+      traft_a
+      ${CMAKE_THREAD_LIBS_INIT}
+      ${_REFLECTION}
+      ${_GRPC_GRPCPP}
+      ${_PROTOBUF_LIBPROTOBUF})
 
 install (TARGETS traft traft_cli DESTINATION bin)
