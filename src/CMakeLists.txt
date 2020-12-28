@@ -1,6 +1,6 @@
 #Project TRAFT by ZhangWen
 
-message(STATUS "Building: ${CMAKE_CURRENT_BINARY_DIR")
+message(STATUS "Building: ${CMAKE_CURRENT_BINARY_DIR}")
 
 set (DIR_SRCS
     config.cc
